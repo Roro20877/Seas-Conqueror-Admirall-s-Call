@@ -1,0 +1,19 @@
+public class BoatController : MonoBehaviour
+{
+    public float speed = 10f; // Vitesse de déplacement 
+    public float turnSpeed = 100f; // Vitesse de rotation 
+
+    // Met à jour la physique du bateau
+    void FixedUpdate()
+    {
+        // Récupère les touches z, q, s et d
+        float horizontal = Input.GetAxis("Horizontal"); // q et d
+        float vertical = Input.GetAxis("Vertical"); // z et s
+
+        // avant ou arrière
+        transform.Translate(Vector3.forward * vertical * speed * Time.deltaTime);
+
+        //à gauche ou à droite
+        transform.Rotate(Vector3.up * horizontal * turnSpeed * Time.deltaTime);
+    }
+}
