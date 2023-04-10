@@ -1,0 +1,58 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class TirBateau : MonoBehaviour
+{
+        public GameObject projectilePrefab; 
+        public Transform projectileSpawnPoint; 
+        public float projectileSpeed = 10f; 
+        public float fireRate = 0.5f; 
+        private float nextFireTime = 0f; 
+        public LineRenderer crosshair; 
+
+        public float projectileForce; // Force appliquée sur le projectile
+
+    
+        void Update()
+        {
+            // Si la touche de tir est enfoncée et que le temps de prochain tir est atteint
+            if (Input.GetButtonDown("Fire1") && Time.time >= nextFireTime)
+            {
+                // Met à jour le temps de prochain tir
+                nextFireTime = Time.time + fireRate;
+
+                // Créé un nouveau projectile à partir du prefab
+                GameObject projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, Quaternion.identity);
+
+                // Donne une vitesse initiale au projectile
+                Rigidbody rb = projectile.GetComponent<Rigidbody>();
+                rb.velocity = transform.forward * projectileSpeed;
+
+                // Récupère la position du curseur dans le monde 3D
+                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+                // Fait pivoter le viseur pour pointer vers le curseur
+                Vector3 dir = mousePos - transform.position;
+                Quaternion lookRotation = Quaternion.LookRotation(dir, Vector3.up);
+                crosshair.transform.rotation = lookRotation;
+
+                // Applique une force au projectile pour le tirer
+                rb.AddForce(dir.normalized * projectileForce, ForceMode.Impulse);
+            }
+            Debug.Log("Mouse position: " + Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        }
+}
+
+
+    
+
+
+    
+    
+    
+
+
+    
+
+
